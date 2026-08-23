@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://clsanpedro.com/sitemap.xml

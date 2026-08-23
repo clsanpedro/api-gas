@@ -1,0 +1,2060 @@
+/* ==========================================================
+   INICIO: VARIABLES TEMA CLARO
+   ========================================================== */
+
+:root {
+	color-scheme: light;
+
+	--bg: #f5f7fa;
+	--surface: #ffffff;
+	--surface-soft: #f8fafc;
+
+	--text: #172033;
+	--muted: #667085;
+
+	--border: #dfe4ea;
+
+	--accent: #0f766e;
+	--accent-hover: #0b5f59;
+	--accent-soft: #ccfbf1;
+
+	--header-bg: rgba(255, 255, 255, 0.94);
+
+	--footer-bg: #101828;
+	--footer-text: #d0d5dd;
+
+	--shadow: 0 8px 24px rgba(16, 24, 40, 0.06);
+
+	--map-filter: none;
+}
+
+/* ==========================================================
+   FIN: VARIABLES TEMA CLARO
+   ========================================================== */
+
+/* ==========================================================
+   INICIO: DARK AUTOMÁTICO
+   ========================================================== */
+
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme='light']) {
+		color-scheme: dark;
+
+		--bg: #0b1220;
+		--surface: #111827;
+		--surface-soft: #162033;
+
+		--text: #f1f5f9;
+		--muted: #94a3b8;
+
+		--border: #283548;
+
+		--accent: #5eead4;
+		--accent-hover: #99f6e4;
+		--accent-soft: #123b38;
+
+		--header-bg: rgba(11, 18, 32, 0.94);
+
+		--footer-bg: #070c15;
+		--footer-text: #94a3b8;
+
+		--shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+
+		--map-filter: brightness(0.78) contrast(1.12) saturate(0.75);
+	}
+}
+
+/* ==========================================================
+   FIN: DARK AUTOMÁTICO
+   ========================================================== */
+
+/* ==========================================================
+   INICIO: DARK MANUAL
+   ========================================================== */
+
+:root[data-theme='dark'] {
+	color-scheme: dark;
+
+	--bg: #0b1220;
+	--surface: #111827;
+	--surface-soft: #162033;
+
+	--text: #f1f5f9;
+	--muted: #94a3b8;
+
+	--border: #283548;
+
+	--accent: #5eead4;
+	--accent-hover: #99f6e4;
+	--accent-soft: #123b38;
+
+	--header-bg: rgba(11, 18, 32, 0.94);
+
+	--footer-bg: #070c15;
+	--footer-text: #94a3b8;
+
+	--shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+
+	--map-filter: brightness(0.78) contrast(1.12) saturate(0.75);
+}
+
+/* ==========================================================
+   FIN: DARK MANUAL
+   ========================================================== */
+
+/* ==========================================================
+   INICIO: BASE
+   ========================================================== */
+
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	margin: 0;
+	min-height: 100%;
+}
+
+html {
+	background: var(--bg);
+}
+
+body {
+	font-family: 'Manrope', sans-serif;
+
+	background: var(--bg);
+	color: var(--text);
+}
+
+a {
+	color: inherit;
+}
+
+.page {
+	min-height: 100vh;
+
+	display: flex;
+	flex-direction: column;
+}
+
+.container {
+	width: min(1100px, calc(100% - 32px));
+
+	margin: 0 auto;
+}
+
+/* ==========================================================
+   FIN: BASE
+   ========================================================== */
+
+/* ==========================================================
+   INICIO: HEADER
+   ========================================================== */
+
+.site-header {
+	position: relative;
+
+	z-index: 100;
+
+	background: var(--header-bg);
+
+	border-bottom: 1px solid var(--border);
+
+	backdrop-filter: blur(12px);
+}
+
+.site-header .container {
+	min-height: 72px;
+
+	display: flex;
+
+	align-items: center;
+	justify-content: space-between;
+
+	gap: 20px;
+}
+
+.brand {
+	color: var(--text);
+
+	text-decoration: none;
+
+	font-size: 1.35rem;
+	font-weight: 800;
+
+	letter-spacing: -0.04em;
+}
+
+.theme-toggle {
+	min-height: 40px;
+
+	display: inline-flex;
+
+	align-items: center;
+	justify-content: center;
+
+	gap: 8px;
+
+	padding: 8px 13px;
+
+	font: inherit;
+
+	color: var(--text);
+	background: var(--surface);
+
+	border: 1px solid var(--border);
+	border-radius: 999px;
+
+	cursor: pointer;
+
+	font-size: 0.82rem;
+	font-weight: 700;
+}
+
+/* ==========================================================
+   FIN: HEADER
+   ========================================================== */
+
+/* ==========================================================
+   INICIO: MAIN
+   ========================================================== */
+
+.site-main {
+	flex: 1;
+
+	padding: 48px 0 64px;
+}
+
+h1,
+h2,
+h3,
+p {
+	margin-top: 0;
+}
+
+h1 {
+	margin-bottom: 12px;
+
+	font-size: clamp(2rem, 5vw, 3.2rem);
+
+	line-height: 1.05;
+
+	letter-spacing: -0.045em;
+}
+
+h2 {
+	margin-bottom: 20px;
+
+	font-size: 1.35rem;
+
+	letter-spacing: -0.025em;
+}
+
+section {
+	margin-top: 36px;
+}
+
+.intro {
+	max-width: 720px;
+
+	color: var(--muted);
+
+	font-size: 1.05rem;
+
+	line-height: 1.7;
+}
+
+.section-intro {
+	max-width: 720px;
+
+	margin-bottom: 20px;
+
+	color: var(--muted);
+
+	line-height: 1.7;
+}
+
+.updated-at {
+	color: var(--muted);
+
+	font-size: 0.9rem;
+}
+
+/* ==========================================================
+   FIN: MAIN
+   ========================================================== */
+
+/* ==========================================================
+   INICIO: BREADCRUMBS
+   ========================================================== */
+
+.breadcrumbs {
+	display: flex;
+
+	flex-wrap: wrap;
+
+	align-items: center;
+
+	gap: 8px;
+
+	margin-bottom: 28px;
+
+	color: var(--muted);
+
+	font-size: 0.88rem;
+}
+
+.breadcrumbs a {
+	color: var(--accent);
+
+	text-decoration: none;
+
+	font-weight: 600;
+}
+
+/* ==========================================================
+   FIN: BREADCRUMBS
+   ========================================================== */
+
+/* ==========================================================
+   INICIO: NAVEGACIÓN CONTEXTUAL
+   ========================================================== */
+
+.context-nav {
+	display: flex;
+
+	flex-wrap: wrap;
+
+	gap: 10px;
+
+	margin: -12px 0 30px;
+}
+
+.context-nav-link {
+	display: inline-flex;
+
+	align-items: center;
+
+	gap: 7px;
+
+	min-height: 40px;
+
+	padding: 9px 14px;
+
+	color: var(--text);
+	background: var(--surface);
+
+	border: 1px solid var(--border);
+	border-radius: 10px;
+
+	text-decoration: none;
+
+	font-size: 0.86rem;
+	font-weight: 700;
+}
+
+.context-nav-link-primary {
+	color: var(--accent);
+
+	border-color: var(--accent);
+
+	background: color-mix(in srgb, var(--accent-soft) 45%, var(--surface));
+}
+
+/* ==========================================================
+   FIN: NAVEGACIÓN CONTEXTUAL
+   ========================================================== */
+
+/* ==========================================================
+   INICIO: CARDS / STATS
+   ========================================================== */
+
+.stats {
+	display: grid;
+
+	grid-template-columns: repeat(4, 1fr);
+
+	gap: 16px;
+}
+
+.card {
+	padding: 22px;
+
+	background: var(--surface);
+
+	border: 1px solid var(--border);
+	border-radius: 14px;
+}
+
+.card strong {
+	display: block;
+
+	margin-bottom: 8px;
+
+	color: var(--muted);
+
+	font-size: 0.88rem;
+}
+
+.card p {
+	margin: 0;
+
+	font-size: 1.8rem;
+	font-weight: 800;
+}
+
+.history-message {
+	color: var(--muted);
+
+	font-size: 1rem !important;
+	font-weight: 500 !important;
+
+	line-height: 1.6;
+}
+
+/* ==========================================================
+   FIN: CARDS / STATS
+   ========================================================== */
+
+/* ==========================================================
+   INICIO: BOTONES
+   ========================================================== */
+
+.button-primary {
+	display: inline-flex;
+
+	align-items: center;
+	justify-content: center;
+
+	padding: 12px 20px;
+
+	background: var(--accent);
+	color: #ffffff;
+
+	border-radius: 10px;
+
+	text-decoration: none;
+
+	font-weight: 700;
+}
+
+:root[data-theme='dark'] .button-primary {
+	color: #071712;
+}
+
+/* ==========================================================
+   FIN: BOTONES
+   ========================================================== */
+
+/* ==========================================================
+   INICIO: GASOLINERA DESTACADA
+   ========================================================== */
+
+.cheapest {
+	padding: 28px;
+
+	background: var(--surface);
+
+	border: 1px solid var(--border);
+	border-radius: 14px;
+}
+
+.price-highlight {
+	display: inline-block;
+
+	margin-top: 8px;
+
+	padding: 8px 12px;
+
+	background: var(--accent-soft);
+	color: var(--accent);
+
+	border-radius: 8px;
+
+	font-size: 1.4rem;
+	font-weight: 800;
+}
+
+/* ==========================================================
+   FIN: GASOLINERA DESTACADA
+   ========================================================== */
+
+/* ==========================================================
+   INICIO: SELECTOR COMBUSTIBLE
+   ========================================================== */
+
+.fuel-selector {
+	display: flex;
+
+	align-items: center;
+
+	gap: 12px;
+
+	margin: 28px 0;
+}
+
+.fuel-selector label {
+	font-weight: 700;
+}
+
+.fuel-selector select {
+	min-width: 220px;
+
+	padding: 10px 12px;
+
+	font: inherit;
+
+	background: var(--surface);
+	color: var(--text);
+
+	border: 1px solid var(--border);
+	border-radius: 10px;
+}
+
+/* ==========================================================
+   FIN: SELECTOR COMBUSTIBLE
+   ========================================================== */
+
+/* ==========================================================
+   INICIO: RANKING ESTACIONES
+   ========================================================== */
+
+.station-list {
+	display: grid;
+
+	gap: 12px;
+}
+
+.station-item {
+	display: grid;
+
+	grid-template-columns:
+		48px
+		minmax(0, 1fr)
+		auto;
+
+	gap: 16px;
+
+	align-items: center;
+
+	padding: 18px 20px;
+
+	background: var(--surface);
+
+	border: 1px solid var(--border);
+	border-radius: 12px;
+}
+
+.station-rank {
+	width: 40px;
+	height: 40px;
+
+	display: flex;
+
+	align-items: center;
+	justify-content: center;
+
+	background: var(--accent-soft);
+	color: var(--accent);
+
+	border-radius: 10px;
+
+	font-weight: 800;
+}
+
+.station-info h3 {
+	margin: 0 0 4px;
+
+	font-size: 1rem;
+}
+
+.station-info p {
+	margin: 0;
+
+	color: var(--muted);
+
+	font-size: 0.9rem;
+}
+
+.station-location {
+	margin-top: 3px !important;
+}
+
+.station-price {
+	color: var(--accent);
+
+	font-size: 1.25rem;
+	font-weight: 800;
+
+	white-space: nowrap;
+}
+
+.station-name-link {
+	color: var(--text);
+
+	text-decoration: none;
+}
+
+.station-name-link:hover {
+	color: var(--accent);
+}
+
+/* ==========================================================
+   FIN: RANKING ESTACIONES
+   ========================================================== */
+
+/* ==========================================================
+   INICIO: PROVINCIAS / MUNICIPIOS
+   ========================================================== */
+
+.municipalities-section {
+	margin-top: 48px;
+}
+
+.municipality-grid {
+	display: grid;
+
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+
+	gap: 10px;
+}
+
+.municipality-link {
+	display: flex;
+
+	align-items: center;
+	justify-content: space-between;
+
+	gap: 12px;
+
+	padding: 14px 16px;
+
+	background: var(--surface);
+	color: var(--text);
+
+	border: 1px solid var(--border);
+	border-radius: 10px;
+
+	text-decoration: none;
+
+	font-size: 0.92rem;
+	font-weight: 600;
+}
+
+.municipality-link small {
+	display: block;
+
+	margin-top: 4px;
+
+	color: var(--muted);
+
+	font-size: 0.76rem;
+}
+
+.municipality-arrow {
+	color: var(--accent);
+
+	font-weight: 800;
+}
+
+.municipality-link[hidden] {
+	display: none;
+}
+
+.municipality-toggle {
+	margin-top: 20px;
+
+	padding: 11px 18px;
+
+	font: inherit;
+
+	color: var(--accent);
+	background: var(--surface);
+
+	border: 1px solid var(--accent);
+	border-radius: 10px;
+
+	cursor: pointer;
+
+	font-weight: 700;
+}
+
+/* ==========================================================
+   FIN: PROVINCIAS / MUNICIPIOS
+   ========================================================== */
+
+/* ==========================================================
+   INICIO: HERO ESTACIÓN
+   ========================================================== */
+
+.station-hero {
+	display: flex;
+
+	justify-content: space-between;
+
+	gap: 24px;
+
+	padding: 28px;
+
+	background: linear-gradient(135deg, var(--surface), var(--accent-soft));
+
+	border: 1px solid var(--border);
+	border-radius: 18px;
+
+	box-shadow: var(--shadow);
+}
+
+.station-eyebrow {
+	display: inline-block;
+
+	margin-bottom: 10px;
+
+	color: var(--accent);
+
+	font-size: 0.82rem;
+	font-weight: 800;
+
+	text-transform: uppercase;
+
+	letter-spacing: 0.08em;
+}
+
+.station-hero-location {
+	margin: 0;
+
+	color: var(--muted);
+}
+
+.station-hero-badge {
+	height: fit-content;
+
+	padding: 8px 12px;
+
+	background: var(--surface);
+	color: var(--muted);
+
+	border: 1px solid var(--border);
+	border-radius: 999px;
+
+	font-size: 0.78rem;
+	font-weight: 700;
+}
+
+/* ==========================================================
+   FIN: HERO ESTACIÓN
+   ========================================================== */
+
+/* ==========================================================
+   INICIO: DATOS ESTACIÓN
+   ========================================================== */
+
+.station-details-card {
+	padding: 28px;
+
+	background: var(--surface);
+
+	border: 1px solid var(--border);
+	border-radius: 16px;
+}
+
+.station-details-grid {
+	display: grid;
+
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+
+	gap: 20px;
+}
+
+.station-detail {
+	display: flex;
+
+	flex-direction: column;
+
+	gap: 6px;
+}
+
+.station-detail-wide {
+	grid-column: 1 / -1;
+}
+
+.station-detail-label {
+	color: var(--muted);
+
+	font-size: 0.78rem;
+	font-weight: 700;
+
+	text-transform: uppercase;
+}
+
+.station-detail-link {
+	color: var(--accent);
+
+	text-decoration: none;
+
+	font-weight: 700;
+}
+
+/* ==========================================================
+   FIN: DATOS ESTACIÓN
+   ========================================================== */
+
+/* ==========================================================
+   INICIO: PRECIOS ESTACIÓN
+   ========================================================== */
+
+.station-price-grid {
+	display: grid;
+
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+
+	gap: 14px;
+}
+
+.fuel-price-card {
+	display: flex;
+
+	flex-direction: column;
+
+	gap: 10px;
+
+	padding: 18px;
+
+	background: var(--surface);
+
+	border: 1px solid var(--border);
+	border-radius: 14px;
+}
+
+.fuel-price-name {
+	color: var(--muted);
+
+	font-size: 0.86rem;
+	font-weight: 700;
+}
+
+.fuel-price-value {
+	color: var(--accent);
+
+	font-size: 1.5rem;
+	font-weight: 800;
+}
+
+/* ==========================================================
+   FIN: PRECIOS ESTACIÓN
+   ========================================================== */
+
+/* ==========================================================
+   INICIO: MAPA
+   ========================================================== */
+
+.station-map-section {
+	margin-top: 40px;
+}
+
+.station-map-heading {
+	display: flex;
+
+	align-items: flex-end;
+	justify-content: space-between;
+
+	gap: 20px;
+
+	margin-bottom: 18px;
+}
+
+.station-map-card {
+	overflow: hidden;
+
+	background: var(--surface);
+
+	border: 1px solid var(--border);
+	border-radius: 16px;
+}
+
+.station-map {
+	width: 100%;
+	height: 380px;
+}
+
+.map-external-link {
+	padding: 10px 14px;
+
+	color: var(--accent);
+
+	border: 1px solid var(--accent);
+	border-radius: 10px;
+
+	text-decoration: none;
+
+	font-size: 0.88rem;
+	font-weight: 700;
+}
+
+:root[data-theme='dark'] .station-map .leaflet-tile-pane {
+	filter: var(--map-filter);
+}
+
+/* ==========================================================
+   FIN: MAPA
+   ========================================================== */
+
+/* ==========================================================
+   INICIO: BUSCADOR
+   ========================================================== */
+
+.search-form {
+	position: relative;
+
+	width: 100%;
+}
+
+.search-label {
+	display: block;
+
+	margin-bottom: 10px;
+
+	font-size: 0.92rem;
+	font-weight: 700;
+}
+
+.search-form-row {
+	display: grid;
+
+	grid-template-columns:
+		minmax(0, 1fr)
+		130px;
+
+	gap: 12px;
+}
+
+.search-input {
+	width: 100%;
+
+	padding: 14px 16px;
+
+	font: inherit;
+
+	color: var(--text);
+	background: var(--surface);
+
+	border: 1px solid var(--border);
+	border-radius: 12px;
+
+	outline: none;
+}
+
+.search-input:focus {
+	border-color: var(--accent);
+
+	box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.search-submit {
+	border: 0;
+
+	cursor: pointer;
+}
+
+.search-results-summary {
+	margin-top: 10px;
+
+	color: var(--muted);
+
+	font-size: 0.92rem;
+}
+
+.search-results-layout {
+	margin-top: 30px;
+}
+
+.search-results-layout.has-sidebar {
+	display: grid;
+
+	grid-template-columns:
+		300px
+		minmax(0, 1fr);
+
+	gap: 24px;
+}
+
+.search-results-sidebar {
+	display: grid;
+
+	gap: 18px;
+}
+
+.search-panel {
+	margin: 0;
+
+	overflow: hidden;
+
+	background: var(--surface);
+
+	border: 1px solid var(--border);
+	border-radius: 16px;
+
+	box-shadow: var(--shadow);
+}
+
+.search-panel-header {
+	min-height: 66px;
+
+	display: flex;
+
+	align-items: center;
+
+	gap: 10px;
+
+	padding: 18px 20px;
+
+	border-bottom: 1px solid var(--border);
+}
+
+.search-panel-header h2 {
+	margin: 0;
+
+	font-size: 1.2rem;
+}
+
+.search-count-badge {
+	padding: 4px 9px;
+
+	color: var(--accent);
+	background: var(--accent-soft);
+
+	border-radius: 999px;
+
+	font-size: 0.77rem;
+	font-weight: 800;
+}
+
+.search-geo-link {
+	display: flex;
+
+	align-items: center;
+	justify-content: space-between;
+
+	gap: 14px;
+
+	padding: 14px 20px;
+
+	color: var(--text);
+
+	text-decoration: none;
+}
+
+.search-geo-link + .search-geo-link {
+	border-top: 1px solid var(--border);
+}
+
+.search-geo-link strong,
+.search-geo-link small {
+	display: block;
+}
+
+.search-geo-link small {
+	margin-top: 3px;
+
+	color: var(--muted);
+
+	font-size: 0.76rem;
+}
+
+.search-geo-arrow {
+	color: var(--accent);
+}
+
+.search-station-list {
+	display: grid;
+}
+
+.search-station-item {
+	display: grid;
+
+	grid-template-columns:
+		minmax(0, 1fr)
+		auto;
+
+	gap: 24px;
+
+	align-items: center;
+
+	padding: 18px 24px;
+}
+
+.search-station-item + .search-station-item {
+	border-top: 1px solid var(--border);
+}
+
+.search-address {
+	color: var(--muted);
+}
+
+.search-result-action {
+	color: var(--accent);
+
+	text-decoration: none;
+
+	font-size: 0.88rem;
+	font-weight: 800;
+
+	white-space: nowrap;
+}
+
+.search-pagination,
+.municipality-pagination {
+	display: flex;
+
+	flex-wrap: wrap;
+
+	align-items: center;
+	justify-content: center;
+
+	gap: 4px;
+
+	width: fit-content;
+
+	margin: 22px auto 0;
+
+	padding: 6px;
+
+	background: var(--surface);
+
+	border: 1px solid var(--border);
+	border-radius: 12px;
+}
+
+.search-page-link,
+.municipality-page-link {
+	min-width: 38px;
+	height: 38px;
+
+	display: inline-flex;
+
+	align-items: center;
+	justify-content: center;
+
+	padding: 0 10px;
+
+	color: var(--text);
+
+	border-radius: 8px;
+
+	text-decoration: none;
+
+	font-size: 0.84rem;
+	font-weight: 700;
+}
+
+.search-page-link.is-active,
+.municipality-page-link.is-active {
+	color: #071712;
+	background: var(--accent);
+}
+
+.search-pagination-summary,
+.municipality-pagination-summary {
+	margin-top: 12px;
+
+	color: var(--muted);
+
+	text-align: center;
+
+	font-size: 0.8rem;
+}
+
+/* ==========================================================
+   FIN: BUSCADOR
+   ========================================================== */
+
+/* ==========================================================
+   INICIO: AUTOCOMPLETADO
+   ========================================================== */
+
+.search-autocomplete {
+	position: absolute;
+
+	z-index: 1000;
+
+	top: calc(100% + 8px);
+	left: 0;
+
+	width: calc(100% - 142px);
+
+	overflow: hidden;
+
+	background: var(--surface);
+
+	border: 1px solid var(--border);
+	border-radius: 14px;
+
+	box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+}
+
+.search-autocomplete[hidden] {
+	display: none;
+}
+
+.search-autocomplete-item {
+	display: flex;
+
+	align-items: center;
+	justify-content: space-between;
+
+	gap: 16px;
+
+	padding: 11px 16px;
+
+	color: var(--text);
+
+	text-decoration: none;
+}
+
+.search-autocomplete-item + .search-autocomplete-item {
+	border-top: 1px solid var(--border);
+}
+
+.search-autocomplete-main strong,
+.search-autocomplete-main small {
+	display: block;
+}
+
+.search-autocomplete-main small {
+	margin-top: 3px;
+
+	color: var(--muted);
+
+	font-size: 0.75rem;
+}
+
+.search-autocomplete-arrow {
+	color: var(--accent);
+}
+
+/* ==========================================================
+   FIN: AUTOCOMPLETADO
+   ========================================================== */
+
+/* ==========================================================
+   INICIO: TODAS LAS GASOLINERAS DEL MUNICIPIO
+   ========================================================== */
+
+.municipality-all-stations {
+	margin-top: 56px;
+}
+
+.municipality-list-heading {
+	display: flex;
+
+	align-items: flex-start;
+	justify-content: space-between;
+
+	gap: 24px;
+
+	margin-bottom: 18px;
+}
+
+.municipality-list-heading h2 {
+	margin-bottom: 8px;
+}
+
+.municipality-list-heading .section-intro {
+	margin-bottom: 0;
+}
+
+.municipality-total-badge {
+	flex: 0 0 auto;
+
+	display: inline-flex;
+
+	align-items: center;
+	justify-content: center;
+
+	min-width: 44px;
+	height: 32px;
+
+	padding: 0 12px;
+
+	color: var(--accent);
+	background: var(--accent-soft);
+
+	border-radius: 999px;
+
+	font-size: 0.84rem;
+	font-weight: 800;
+}
+
+.municipality-stations-panel {
+	overflow: hidden;
+
+	background: var(--surface);
+
+	border: 1px solid var(--border);
+	border-radius: 16px;
+
+	box-shadow: var(--shadow);
+}
+
+.municipality-station-row {
+	display: grid;
+
+	grid-template-columns:
+		minmax(0, 1fr)
+		auto;
+
+	gap: 24px;
+
+	align-items: center;
+
+	min-height: 100px;
+
+	padding: 18px 22px;
+}
+
+.municipality-station-row + .municipality-station-row {
+	border-top: 1px solid var(--border);
+}
+
+.municipality-station-info {
+	min-width: 0;
+}
+
+.municipality-station-info h3 {
+	margin: 0 0 6px;
+
+	font-size: 1rem;
+}
+
+.municipality-station-info p {
+	margin: 0 0 3px;
+
+	color: var(--muted);
+
+	font-size: 0.9rem;
+
+	line-height: 1.45;
+}
+
+.municipality-station-info small {
+	color: var(--muted);
+
+	font-size: 0.76rem;
+}
+
+.municipality-station-side {
+	display: flex;
+
+	align-items: center;
+
+	gap: 18px;
+}
+
+.municipality-station-price {
+	color: var(--accent);
+
+	font-size: 1.08rem;
+	font-weight: 800;
+
+	white-space: nowrap;
+}
+
+.municipality-no-price {
+	padding: 5px 9px;
+
+	color: var(--muted);
+	background: var(--surface-soft);
+
+	border: 1px solid var(--border);
+	border-radius: 7px;
+
+	font-size: 0.76rem;
+	font-weight: 700;
+
+	white-space: nowrap;
+}
+
+.municipality-page-direction {
+	min-width: auto;
+}
+
+.municipality-page-ellipsis {
+	width: 26px;
+
+	display: inline-flex;
+
+	align-items: center;
+	justify-content: center;
+
+	color: var(--muted);
+}
+
+/* ==========================================================
+   FIN: TODAS LAS GASOLINERAS DEL MUNICIPIO
+   ========================================================== */
+
+/* ==========================================================
+   INICIO: GRÁFICO HISTÓRICO
+   ========================================================== */
+
+.history-chart-card {
+	margin: 24px 0;
+
+	padding: 22px;
+
+	background: var(--surface);
+
+	border: 1px solid var(--border);
+	border-radius: 16px;
+
+	box-shadow: var(--shadow);
+}
+
+.history-chart-header {
+	display: flex;
+
+	justify-content: space-between;
+
+	gap: 20px;
+
+	margin-bottom: 20px;
+}
+
+.history-chart-wrapper {
+	position: relative;
+
+	height: 320px;
+}
+
+/* ==========================================================
+   FIN: GRÁFICO HISTÓRICO
+   ========================================================== */
+
+/* ==========================================================
+   INICIO: LISTADO HISTÓRICO DE PRECIOS
+   ========================================================== */
+
+/*
+ * Estructura esperada desde index.php:
+ *
+ * .history-list
+ *   .history-list-header
+ *   .history-row
+ *     .history-cell.history-date
+ *     .history-cell.history-price
+ *     .history-cell.history-change
+ *     .history-cell.history-percent
+ *
+ * En escritorio funciona como una tabla visual.
+ * En móvil cada fila se transforma en una tarjeta compacta.
+ */
+
+.history-list {
+	margin-top: 22px;
+
+	overflow: hidden;
+
+	background: var(--surface);
+
+	border: 1px solid var(--border);
+	border-radius: 16px;
+
+	box-shadow: var(--shadow);
+}
+
+.history-list-header {
+	display: grid;
+
+	grid-template-columns:
+		minmax(220px, 1.6fr)
+		minmax(130px, 0.8fr)
+		minmax(150px, 0.9fr)
+		minmax(130px, 0.8fr);
+
+	gap: 18px;
+
+	align-items: center;
+
+	padding: 13px 20px;
+
+	background: var(--surface-soft);
+
+	border-bottom: 1px solid var(--border);
+
+	color: var(--muted);
+
+	font-size: 0.74rem;
+	font-weight: 800;
+
+	text-transform: uppercase;
+	letter-spacing: 0.045em;
+}
+
+.history-row {
+	display: grid;
+
+	grid-template-columns:
+		minmax(220px, 1.6fr)
+		minmax(130px, 0.8fr)
+		minmax(150px, 0.9fr)
+		minmax(130px, 0.8fr);
+
+	gap: 18px;
+
+	align-items: center;
+
+	min-height: 74px;
+
+	padding: 16px 20px;
+
+	background: var(--surface);
+}
+
+.history-row + .history-row {
+	border-top: 1px solid var(--border);
+}
+
+.history-cell {
+	min-width: 0;
+}
+
+.history-date time {
+	display: block;
+
+	color: var(--text);
+
+	font-size: 0.92rem;
+	font-weight: 700;
+
+	white-space: nowrap;
+}
+
+.history-price strong {
+	display: block;
+
+	color: var(--accent);
+
+	font-size: 1.05rem;
+	font-weight: 800;
+
+	white-space: nowrap;
+}
+
+.history-change,
+.history-percent {
+	color: var(--muted);
+
+	font-size: 0.9rem;
+	font-weight: 700;
+
+	white-space: nowrap;
+}
+
+.history-no-data {
+	color: var(--muted);
+
+	font-weight: 700;
+}
+
+/*
+ * Las etiquetas "Fecha y hora", "Precio", etc.
+ * solo se muestran en móvil.
+ */
+
+.history-mobile-label {
+	display: none;
+
+	margin-bottom: 4px;
+
+	color: var(--muted);
+
+	font-size: 0.7rem;
+	font-weight: 800;
+
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+
+/* ==========================================================
+   FIN: LISTADO HISTÓRICO DE PRECIOS
+   ========================================================== */
+
+/* ==========================================================
+   INICIO: LISTADO HISTÓRICO DE PRECIOS
+   ========================================================== */
+
+.history-list {
+	margin-top: 24px;
+	overflow: hidden;
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: 16px;
+	box-shadow: var(--shadow);
+}
+
+.history-list-header,
+.history-row {
+	display: grid;
+	grid-template-columns: minmax(190px, 1.35fr) minmax(130px, 0.8fr) minmax(
+			130px,
+			0.8fr
+		) minmax(120px, 0.7fr);
+	gap: 20px;
+	align-items: center;
+}
+
+.history-list-header {
+	padding: 13px 20px;
+	color: var(--muted);
+	background: var(--surface-soft);
+	border-bottom: 1px solid var(--border);
+	font-size: 0.76rem;
+	font-weight: 800;
+	letter-spacing: 0.03em;
+}
+
+.history-row {
+	min-height: 70px;
+	padding: 16px 20px;
+}
+
+.history-row + .history-row {
+	border-top: 1px solid var(--border);
+}
+
+.history-cell {
+	min-width: 0;
+}
+
+.history-date time,
+.history-price strong,
+.history-change > span:not(.history-mobile-label),
+.history-percent > span:not(.history-mobile-label) {
+	white-space: nowrap;
+}
+
+.history-date time {
+	color: var(--text);
+	font-size: 0.9rem;
+	font-weight: 700;
+}
+
+.history-price strong {
+	color: var(--accent);
+	font-size: 1.02rem;
+	font-weight: 800;
+}
+
+.history-change,
+.history-percent {
+	color: var(--muted);
+	font-size: 0.9rem;
+	font-weight: 700;
+}
+
+.history-no-data {
+	color: var(--muted);
+}
+
+.history-mobile-label {
+	display: none;
+}
+
+/* ==========================================================
+   FIN: LISTADO HISTÓRICO DE PRECIOS
+   ========================================================== */
+
+/* ==========================================================
+   INICIO: 404
+   ========================================================== */
+
+.error-page {
+	max-width: 720px;
+
+	margin: 40px auto 0;
+
+	padding: 48px 32px;
+
+	text-align: center;
+
+	background: var(--surface);
+
+	border: 1px solid var(--border);
+	border-radius: 18px;
+}
+
+.error-code {
+	color: var(--accent);
+
+	font-size: 6rem;
+	font-weight: 800;
+}
+
+/* ==========================================================
+   FIN: 404
+   ========================================================== */
+
+/* ==========================================================
+   INICIO: FOOTER
+   ========================================================== */
+
+.site-footer {
+	margin-top: auto;
+
+	padding: 24px 0;
+
+	background: var(--footer-bg);
+	color: var(--footer-text);
+}
+
+.site-footer p {
+	margin: 0;
+
+	font-size: 0.9rem;
+}
+
+/* ==========================================================
+   FIN: FOOTER
+   ========================================================== */
+
+/* ==========================================================
+   INICIO: ANCLA LISTADO MUNICIPIO
+   ========================================================== */
+
+#todas-gasolineras {
+	scroll-margin-top: 24px;
+}
+
+/* ==========================================================
+   FIN: ANCLA LISTADO MUNICIPIO
+   ========================================================== */
+
+/* ==========================================================
+   INICIO: RESPONSIVE
+   ========================================================== */
+
+@media (max-width: 900px) {
+	.history-list-header,
+	.history-row {
+		grid-template-columns:
+			minmax(180px, 1.35fr)
+			minmax(115px, 0.75fr)
+			minmax(125px, 0.8fr)
+			minmax(110px, 0.75fr);
+
+		gap: 14px;
+	}
+
+	.stats {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.station-price-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.search-results-layout.has-sidebar {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (max-width: 800px) {
+	.municipality-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (max-width: 620px) {
+	/*
+	 * Histórico:
+	 * de tabla visual a tarjetas compactas.
+	 */
+	.history-list {
+		overflow: visible;
+
+		background: transparent;
+
+		border: 0;
+		border-radius: 0;
+
+		box-shadow: none;
+	}
+
+	.history-list-header {
+		display: none;
+	}
+
+	.history-row {
+		grid-template-columns:
+			minmax(0, 1fr)
+			auto;
+
+		gap: 12px 18px;
+
+		min-height: 0;
+
+		margin-bottom: 12px;
+
+		padding: 16px;
+
+		background: var(--surface);
+
+		border: 1px solid var(--border);
+		border-radius: 14px;
+
+		box-shadow: var(--shadow);
+	}
+
+	.history-row + .history-row {
+		border-top: 1px solid var(--border);
+	}
+
+	.history-mobile-label {
+		display: block;
+	}
+
+	.history-date {
+		grid-column: 1 / -1;
+
+		padding-bottom: 2px;
+	}
+
+	.history-date time {
+		white-space: normal;
+	}
+
+	.history-price {
+		grid-column: 1;
+	}
+
+	.history-price strong {
+		font-size: 1.12rem;
+	}
+
+	.history-change {
+		grid-column: 1;
+	}
+
+	.history-percent {
+		grid-column: 2;
+
+		justify-self: end;
+	}
+
+	.history-change,
+	.history-percent {
+		white-space: normal;
+	}
+
+	/* ======================================================
+	   INICIO: LISTADO HISTÓRICO MÓVIL
+	   ====================================================== */
+
+	.history-list {
+		overflow: visible;
+		background: transparent;
+		border: 0;
+		border-radius: 0;
+		box-shadow: none;
+	}
+
+	.history-list-header {
+		display: none;
+	}
+
+	.history-row {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 14px 18px;
+		min-height: 0;
+		margin-bottom: 12px;
+		padding: 16px;
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: 14px;
+		box-shadow: var(--shadow);
+	}
+
+	.history-row + .history-row {
+		border-top: 1px solid var(--border);
+	}
+
+	.history-cell {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+
+	.history-date {
+		grid-column: 1 / -1;
+	}
+
+	.history-mobile-label {
+		display: block;
+		color: var(--muted);
+		font-size: 0.7rem;
+		font-weight: 800;
+		letter-spacing: 0.03em;
+		text-transform: uppercase;
+	}
+
+	.history-date time {
+		white-space: normal;
+	}
+
+	/* ======================================================
+	   FIN: LISTADO HISTÓRICO MÓVIL
+	   ====================================================== */
+	.station-hero {
+		flex-direction: column;
+	}
+
+	.station-details-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.station-price-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.station-item {
+		grid-template-columns:
+			40px
+			minmax(0, 1fr);
+	}
+
+	.station-price {
+		grid-column: 2;
+	}
+
+	.context-nav {
+		flex-direction: column;
+	}
+
+	.context-nav-link {
+		justify-content: center;
+
+		width: 100%;
+	}
+
+	.search-form-row {
+		grid-template-columns: 1fr;
+	}
+
+	.search-autocomplete {
+		width: 100%;
+	}
+
+	.search-station-item {
+		grid-template-columns: 1fr;
+	}
+
+	.station-map-heading {
+		flex-direction: column;
+
+		align-items: stretch;
+	}
+
+	.station-map {
+		height: 300px;
+	}
+
+	/*
+     * Listado completo del municipio.
+     */
+	.municipality-list-heading {
+		flex-direction: column;
+
+		gap: 4px;
+	}
+
+	.municipality-station-row {
+		grid-template-columns: 1fr;
+
+		gap: 12px;
+
+		padding: 16px;
+	}
+
+	.municipality-station-side {
+		justify-content: space-between;
+
+		width: 100%;
+	}
+
+	.municipality-pagination {
+		width: 100%;
+	}
+
+	.municipality-page-link {
+		min-width: 34px;
+
+		padding: 0 7px;
+	}
+
+	.municipality-page-direction {
+		flex: 1;
+	}
+}
+
+@media (max-width: 520px) {
+	.history-row {
+		grid-template-columns: 1fr;
+	}
+
+	.history-date,
+	.history-price,
+	.history-change,
+	.history-percent {
+		grid-column: 1;
+		justify-self: stretch;
+	}
+
+	.container {
+		width: calc(100% - 20px);
+	}
+
+	.site-main {
+		padding: 32px 0 48px;
+	}
+
+	.stats {
+		grid-template-columns: 1fr;
+	}
+
+	.municipality-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.fuel-selector {
+		flex-direction: column;
+
+		align-items: stretch;
+	}
+
+	.fuel-selector select {
+		width: 100%;
+	}
+
+	.theme-toggle-label {
+		display: none;
+	}
+
+	.theme-toggle {
+		width: 40px;
+
+		padding: 8px;
+	}
+
+	.municipality-station-side {
+		align-items: flex-start;
+
+		flex-direction: column;
+
+		gap: 8px;
+	}
+}
+
+/* ==========================================================
+   FIN: RESPONSIVE
+   ========================================================== */
