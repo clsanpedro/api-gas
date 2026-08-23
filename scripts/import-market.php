@@ -86,31 +86,39 @@ try {
 
   /*
    * ============================================================
-   * 3. CONSULTAR EIA
+   * 3. CONSULTAR EIA - BRENT
    * ============================================================
-   *
-   * Pedimos los últimos 15 registros.
-   *
-   * Esto permite recuperar automáticamente
-   * datos publicados con retraso.
    */
 
-  $prices =
+  $brentPrices =
     fetchBrentPrices(
       $apiKey,
       15
     );
 
 
+  if ($brentPrices === []) {
+    throw new RuntimeException(
+      'EIA no ha devuelto precios Brent para importar.'
+    );
+  }
+
+
   /*
    * ============================================================
-   * 4. VALIDAR RESPUESTA
+   * 4. CONSULTAR BCE - EUR/USD
    * ============================================================
    */
 
-  if ($prices === []) {
+  $eurUsdPrices =
+    fetchEurUsdPrices(
+      15
+    );
+
+
+  if ($eurUsdPrices === []) {
     throw new RuntimeException(
-      'EIA no ha devuelto precios para importar.'
+      'El BCE no ha devuelto tipos EUR/USD para importar.'
     );
   }
 
@@ -156,16 +164,17 @@ try {
   $pdo->beginTransaction();
 
 
-  $processedCount = 0;
+  $brentCount = 0;
+  $eurUsdCount = 0;
 
 
   /*
    * ============================================================
-   * 7. GUARDAR PRECIOS
+   * 7. GUARDAR BRENT
    * ============================================================
    */
 
-  foreach ($prices as $price) {
+  foreach ($brentPrices as $price) {
 
     if (
       !isset(
@@ -193,10 +202,6 @@ try {
       (float) $price['value'];
 
 
-    /*
-     * Un precio <= 0 no tiene sentido
-     * para esta serie.
-     */
     if ($value <= 0) {
       continue;
     }
@@ -220,27 +225,94 @@ try {
     ]);
 
 
-    $processedCount++;
+    $brentCount++;
   }
 
 
   /*
    * ============================================================
-   * 8. VALIDAR QUE SE HA PROCESADO ALGO
+   * 8. GUARDAR EUR/USD
    * ============================================================
    */
 
-  if ($processedCount === 0) {
+  foreach ($eurUsdPrices as $price) {
 
+    if (
+      !isset(
+        $price['price_date'],
+        $price['series_code'],
+        $price['value'],
+        $price['unit'],
+        $price['source']
+      )
+    ) {
+      continue;
+    }
+
+
+    if (
+      !is_numeric(
+        $price['value']
+      )
+    ) {
+      continue;
+    }
+
+
+    $value =
+      (float) $price['value'];
+
+
+    if ($value <= 0) {
+      continue;
+    }
+
+
+    $stmt->execute([
+      'price_date' =>
+      $price['price_date'],
+
+      'series_code' =>
+      $price['series_code'],
+
+      'value' =>
+      $value,
+
+      'unit' =>
+      $price['unit'],
+
+      'source' =>
+      $price['source'],
+    ]);
+
+
+    $eurUsdCount++;
+  }
+
+
+  /*
+   * ============================================================
+   * 9. VALIDAR RESULTADOS
+   * ============================================================
+   */
+
+  if ($brentCount === 0) {
     throw new RuntimeException(
-      'No se ha podido guardar ningún precio válido.'
+      'No se ha podido guardar ningún precio Brent válido.'
+    );
+  }
+
+
+  if ($eurUsdCount === 0) {
+    throw new RuntimeException(
+      'No se ha podido guardar ningún tipo EUR/USD válido.'
     );
   }
 
 
   /*
    * ============================================================
-   * 9. CONFIRMAR TRANSACCIÓN
+   * 10. CONFIRMAR TRANSACCIÓN
    * ============================================================
    */
 
@@ -249,7 +321,7 @@ try {
 
   /*
    * ============================================================
-   * 10. CALCULAR DURACIÓN
+   * 11. CALCULAR DURACIÓN
    * ============================================================
    */
 
@@ -263,14 +335,16 @@ try {
 
   /*
    * ============================================================
-   * 11. MOSTRAR RESULTADO
+   * 12. MOSTRAR RESULTADO
    * ============================================================
    */
 
   $output = [
     'Importación de mercado completada correctamente.',
-    'Serie: RBRTE',
-    'Registros procesados: ' . $processedCount,
+    'Brent - Serie: RBRTE',
+    'Brent - Registros procesados: ' . $brentCount,
+    'EUR/USD - Serie: EURUSD',
+    'EUR/USD - Registros procesados: ' . $eurUsdCount,
     'Duración: ' . $duration . ' segundos',
   ];
 
@@ -304,15 +378,16 @@ try {
 
   /*
    * ============================================================
-   * 12. LOG DE ÉXITO
+   * 13. LOG DE ÉXITO
    * ============================================================
    */
 
   logMarketImport(
     'OK'
-      . ' | Serie: RBRTE'
-      . ' | Registros: '
-      . $processedCount
+      . ' | Brent: '
+      . $brentCount
+      . ' | EURUSD: '
+      . $eurUsdCount
       . ' | Duración: '
       . $duration
       . 's'
