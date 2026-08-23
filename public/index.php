@@ -1515,7 +1515,7 @@ if (
             <form
               action="<?= e($searchUrl) ?>"
               method="get"
-              class="search-form">
+              class="search-form home-search-form">
 
               <label
                 for="home-search"
