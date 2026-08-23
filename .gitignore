@@ -4,6 +4,7 @@
 
 app/db.php
 app/cron-config.php
+app/market-config.php
 
 
 # ============================================================
