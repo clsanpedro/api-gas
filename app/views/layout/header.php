@@ -1,3 +1,8 @@
+<?php
+
+/** @var string $homeUrl */
+?>
+
 <header class="site-header">
 
   <div class="container">
