@@ -460,6 +460,46 @@ section {
 	border-radius: 14px;
 }
 
+.cheapest-layout {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	gap: 32px;
+	align-items: center;
+}
+
+.cheapest-details p {
+	margin: 0 0 12px;
+}
+
+.cheapest-details p:last-child {
+	margin-bottom: 0;
+}
+
+.cheapest-price {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 10px;
+	text-align: right;
+}
+
+.cheapest-price-label {
+	color: var(--muted);
+	font-size: 0.92rem;
+}
+
+@media (max-width: 700px) {
+	.cheapest-layout {
+		grid-template-columns: 1fr;
+		gap: 20px;
+	}
+
+	.cheapest-price {
+		align-items: flex-start;
+		text-align: left;
+	}
+}
+
 .price-highlight {
 	display: inline-block;
 

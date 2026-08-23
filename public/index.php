@@ -330,6 +330,13 @@ $homeData =
     $selectedFuel
   );
 
+$homeFuelHistory =
+  getNationalFuelHistory(
+    $pdo,
+    $selectedFuel,
+    365
+  );
+
 /*
  * ============================================================
  * FIN: COMBUSTIBLES

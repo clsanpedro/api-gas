@@ -262,3 +262,81 @@ function getStationFuelHistorySummary(
     $changePercent,
   ];
 }
+
+/**
+ * Devuelve la evolución del precio medio nacional
+ * para un combustible concreto.
+ *
+ * Cada fila incluye:
+ *
+ * - fecha del snapshot
+ * - precio medio nacional
+ */
+function getNationalFuelHistory(
+  PDO $pdo,
+  string $fuelCode,
+  int $limit = 365
+): array {
+
+  /*
+   * Limitamos el número de snapshots para evitar
+   * consultas excesivamente grandes.
+   */
+  $limit = max(
+    1,
+    min(
+      $limit,
+      3650
+    )
+  );
+
+  /*
+   * Seleccionamos primero los últimos snapshots.
+   *
+   * Después calculamos el precio medio nacional
+   * del combustible para cada uno de ellos.
+   */
+  $sql = '
+    SELECT
+      sn.api_date,
+      ROUND(AVG(p.price), 3) AS avg_price
+    FROM (
+      SELECT
+        id,
+        api_date
+      FROM snapshots
+      ORDER BY api_date DESC
+      LIMIT ' . $limit . '
+    ) sn
+    INNER JOIN prices p
+      ON p.snapshot_id = sn.id
+    WHERE p.fuel_code = :fuel_code
+    GROUP BY
+      sn.id,
+      sn.api_date
+    ORDER BY sn.api_date ASC
+  ';
+
+  $stmt = $pdo->prepare($sql);
+
+  $stmt->execute([
+    'fuel_code' => $fuelCode,
+  ]);
+
+  $rows = $stmt->fetchAll();
+
+  $history = [];
+
+  foreach ($rows as $row) {
+
+    $history[] = [
+      'api_date' =>
+      $row['api_date'],
+
+      'avg_price' =>
+      (float) $row['avg_price'],
+    ];
+  }
+
+  return $history;
+}

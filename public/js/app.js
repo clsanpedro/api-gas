@@ -191,6 +191,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	 */
 
 	let historyChart = null;
+	let homeHistoryChart = null;
 
 	function getChartColors() {
 		const styles = getComputedStyle(document.documentElement);
@@ -205,29 +206,31 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 
 	function updateHistoryChartTheme() {
-		if (!historyChart) {
-			return;
-		}
-
 		const colors = getChartColors();
 
-		historyChart.options.plugins.legend.labels.color = colors.text;
+		if (historyChart) {
+			historyChart.options.plugins.legend.labels.color = colors.text;
+			historyChart.options.scales.x.ticks.color = colors.muted;
+			historyChart.options.scales.y.ticks.color = colors.muted;
+			historyChart.options.scales.x.grid.color = colors.border;
+			historyChart.options.scales.y.grid.color = colors.border;
+			historyChart.data.datasets[0].borderColor = colors.accent;
+			historyChart.data.datasets[0].pointBackgroundColor = colors.accent;
+			historyChart.data.datasets[0].pointBorderColor = colors.surface;
+			historyChart.update();
+		}
 
-		historyChart.options.scales.x.ticks.color = colors.muted;
-
-		historyChart.options.scales.y.ticks.color = colors.muted;
-
-		historyChart.options.scales.x.grid.color = colors.border;
-
-		historyChart.options.scales.y.grid.color = colors.border;
-
-		historyChart.data.datasets[0].borderColor = colors.accent;
-
-		historyChart.data.datasets[0].pointBackgroundColor = colors.accent;
-
-		historyChart.data.datasets[0].pointBorderColor = colors.surface;
-
-		historyChart.update();
+		if (homeHistoryChart) {
+			homeHistoryChart.options.plugins.legend.labels.color = colors.text;
+			homeHistoryChart.options.scales.x.ticks.color = colors.muted;
+			homeHistoryChart.options.scales.y.ticks.color = colors.muted;
+			homeHistoryChart.options.scales.x.grid.color = colors.border;
+			homeHistoryChart.options.scales.y.grid.color = colors.border;
+			homeHistoryChart.data.datasets[0].borderColor = colors.accent;
+			homeHistoryChart.data.datasets[0].pointBackgroundColor = colors.accent;
+			homeHistoryChart.data.datasets[0].pointBorderColor = colors.surface;
+			homeHistoryChart.update();
+		}
 	}
 
 	const sectionHeadings = document.querySelectorAll('.site-main section > h2');
@@ -465,6 +468,138 @@ document.addEventListener('DOMContentLoaded', function () {
 	/*
 	 * ====================================================
 	 * FIN: GRÁFICA HISTÓRICA
+	 * ====================================================
+	 */
+
+	/*
+	 * ====================================================
+	 * INICIO: GRÁFICA HISTÓRICA HOME
+	 * ====================================================
+	 */
+
+	const homeHistoryContainer = document.querySelector(
+		'[data-home-history-chart]',
+	);
+
+	if (homeHistoryContainer) {
+		const canvas = homeHistoryContainer.querySelector(
+			'[data-home-history-canvas]',
+		);
+
+		const historyPoints = Array.from(
+			homeHistoryContainer.querySelectorAll('[data-home-history-point]'),
+		);
+
+		if (canvas && historyPoints.length >= 2) {
+			const labels = [];
+			const values = [];
+
+			historyPoints.forEach(function (item) {
+				const rawDate = item.dataset.historyDate;
+				const rawPrice = item.dataset.historyPrice;
+
+				const price = Number(rawPrice);
+
+				if (!rawDate || !Number.isFinite(price)) {
+					return;
+				}
+
+				const parsedDate = new Date(String(rawDate).replace(' ', 'T'));
+
+				let label = rawDate;
+
+				if (!Number.isNaN(parsedDate.getTime())) {
+					label = parsedDate.toLocaleDateString('es-ES', {
+						day: '2-digit',
+						month: '2-digit',
+						year: 'numeric',
+					});
+				}
+
+				labels.push(label);
+				values.push(price);
+			});
+
+			if (labels.length >= 2 && values.length >= 2) {
+				const createHomeHistoryChart = function () {
+					const colors = getChartColors();
+
+					homeHistoryChart = new Chart(canvas, {
+						type: 'line',
+
+						data: {
+							labels: labels,
+
+							datasets: [
+								{
+									label: 'Precio medio €/l',
+									data: values,
+									borderColor: colors.accent,
+									backgroundColor: colors.accent,
+									pointBackgroundColor: colors.accent,
+									pointBorderColor: colors.surface,
+									pointBorderWidth: 2,
+									tension: 0.25,
+								},
+							],
+						},
+
+						options: {
+							responsive: true,
+							maintainAspectRatio: false,
+
+							plugins: {
+								legend: {
+									labels: {
+										color: colors.text,
+									},
+								},
+							},
+
+							scales: {
+								x: {
+									ticks: {
+										color: colors.muted,
+									},
+
+									grid: {
+										color: colors.border,
+									},
+								},
+
+								y: {
+									ticks: {
+										color: colors.muted,
+									},
+
+									grid: {
+										color: colors.border,
+									},
+								},
+							},
+						},
+					});
+				};
+
+				if (typeof Chart !== 'undefined') {
+					createHomeHistoryChart();
+				} else {
+					const chartScript = document.createElement('script');
+
+					chartScript.src =
+						'https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js';
+
+					chartScript.addEventListener('load', createHomeHistoryChart);
+
+					document.body.appendChild(chartScript);
+				}
+			}
+		}
+	}
+
+	/*
+	 * ====================================================
+	 * FIN: GRÁFICA HISTÓRICA HOME
 	 * ====================================================
 	 */
 

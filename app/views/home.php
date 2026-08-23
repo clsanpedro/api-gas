@@ -8,6 +8,7 @@
 /** @var array|null $homeCheapest */
 /** @var string $searchUrl */
 /** @var array|null $snapshot */
+/** @var array $homeFuelHistory */
 ?>
 
 <h1>
@@ -215,6 +216,71 @@
 
   </section>
 
+  <?php if (
+    count($homeFuelHistory) >= 2
+  ): ?>
+
+    <section class="home-history">
+
+      <h2>
+        Evolución del precio medio
+      </h2>
+
+      <p class="section-intro">
+        Evolución del precio medio nacional de
+        <?= e($selectedFuelName) ?>.
+      </p>
+
+      <div
+        class="history-chart-card home-history-chart"
+        data-home-history-chart>
+
+        <div class="history-chart-header">
+
+          <strong>
+            Precio medio nacional
+          </strong>
+
+          <span>
+            <?= count($homeFuelHistory) ?>
+            registros
+          </span>
+
+        </div>
+
+        <div class="history-chart-wrapper">
+
+          <canvas
+            data-home-history-canvas
+            aria-label="Gráfico de evolución del precio medio de <?= e($selectedFuelName) ?>"
+            role="img">
+          </canvas>
+
+        </div>
+
+        <div hidden>
+
+          <?php foreach (
+            $homeFuelHistory
+            as $historyItem
+          ): ?>
+
+            <span
+              data-home-history-point
+              data-history-date="<?= e($historyItem['api_date']) ?>"
+              data-history-price="<?= e($historyItem['avg_price']) ?>">
+            </span>
+
+          <?php endforeach; ?>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  <?php endif; ?>
+
 
   <?php if (
     $fuelData['cheapest_station'] !== null
@@ -233,48 +299,55 @@
         Gasolinera más barata
       </h2>
 
-      <p>
-        <strong>
-          <?= e(
-            $homeCheapest['name']
-          ) ?>
-        </strong>
-      </p>
+      <div class="cheapest-layout">
 
-      <p>
-        <?= e(
-          $homeCheapest['address']
-        ) ?>
-      </p>
+        <div class="cheapest-details">
 
-      <p>
+          <p>
+            <strong>
+              <?= e(
+                $homeCheapest['name']
+              ) ?>
+            </strong>
+          </p>
 
-        <?= e(
-          $homeCheapest['municipality']
-        ) ?>,
+          <p>
+            <?= e(
+              $homeCheapest['address']
+            ) ?>
+          </p>
 
-        <?= e(
-          displayName(
-            $homeCheapest['province']
-          )
-        ) ?>
+          <p>
+            <?= e(
+              $homeCheapest['municipality']
+            ) ?>,
 
-      </p>
+            <?= e(
+              displayName(
+                $homeCheapest['province']
+              )
+            ) ?>
+          </p>
 
-      <p>
+        </div>
 
-        Precio:
+        <div class="cheapest-price">
 
-        <span
-          class="price-highlight">
-          <?= e(
-            formatFuelPrice(
-              $homeCheapest['price']
-            )
-          ) ?>
-        </span>
+          <span class="cheapest-price-label">
+            <?= e($selectedFuelName) ?>
+          </span>
 
-      </p>
+          <span class="price-highlight">
+            <?= e(
+              formatFuelPrice(
+                $homeCheapest['price']
+              )
+            ) ?>
+          </span>
+
+        </div>
+
+      </div>
 
     </section>
 
