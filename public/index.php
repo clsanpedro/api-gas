@@ -344,6 +344,11 @@ $homeBrentHistory =
     365
   );
 
+$homeBrentSummary =
+  getBrentEurSummary(
+    $pdo
+  );
+
 /*
  * ============================================================
  * FIN: COMBUSTIBLES

@@ -176,3 +176,122 @@ function getBrentEurHistory(
     $history
   );
 }
+
+
+/**
+ * Devuelve un resumen del Brent convertido
+ * a euros por barril.
+ *
+ * Incluye:
+ *
+ * - valor actual
+ * - valor anterior
+ * - variación absoluta
+ * - variación porcentual
+ */
+function getBrentEurSummary(
+  PDO $pdo
+): ?array {
+
+  $history =
+    getBrentEurHistory(
+      $pdo,
+      2
+    );
+
+
+  if ($history === []) {
+    return null;
+  }
+
+
+  /*
+   * getBrentEurHistory() devuelve orden cronológico.
+   *
+   * Con dos registros:
+   *
+   * [0] = anterior
+   * [1] = actual
+   */
+  $current =
+    $history[count($history) - 1];
+
+
+  $previous =
+    count($history) >= 2
+    ? $history[count($history) - 2]
+    : null;
+
+
+  $change = null;
+  $changePercent = null;
+
+
+  if ($previous !== null) {
+
+    $change =
+      round(
+        $current['brent_eur']
+          - $previous['brent_eur'],
+        4
+      );
+
+
+    if (
+      $previous['brent_eur'] > 0
+    ) {
+
+      $changePercent =
+        round(
+          (
+            (
+              $current['brent_eur']
+              - $previous['brent_eur']
+            )
+            / $previous['brent_eur']
+          ) * 100,
+          2
+        );
+    }
+  }
+
+
+  return [
+    'current' => [
+      'price_date' =>
+      $current['price_date'],
+
+      'brent_usd' =>
+      $current['brent_usd'],
+
+      'eur_usd' =>
+      $current['eur_usd'],
+
+      'brent_eur' =>
+      $current['brent_eur'],
+    ],
+
+    'previous' =>
+    $previous !== null
+      ? [
+        'price_date' =>
+        $previous['price_date'],
+
+        'brent_usd' =>
+        $previous['brent_usd'],
+
+        'eur_usd' =>
+        $previous['eur_usd'],
+
+        'brent_eur' =>
+        $previous['brent_eur'],
+      ]
+      : null,
+
+    'change' =>
+    $change,
+
+    'change_percent' =>
+    $changePercent,
+  ];
+}

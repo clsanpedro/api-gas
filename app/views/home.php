@@ -285,7 +285,7 @@
   <?php if (
     count($homeBrentHistory) >= 2
   ): ?>
-
+    <?php require __DIR__ . '/components/market-summary.php'; ?>
     <section class="home-market">
 
       <h2>
