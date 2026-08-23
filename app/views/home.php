@@ -1,9 +1,13 @@
 <?php
-/** @var array $gasoline */
+
+/** @var array|null $fuelData */
+/** @var array $fuelTypes */
+/** @var string $selectedFuel */
+/** @var string $selectedFuelName */
 /** @var string $gasStationsUrl */
 /** @var array|null $homeCheapest */
 /** @var string $searchUrl */
-/** @var array $snapshot */
+/** @var array|null $snapshot */
 ?>
 
 <h1>
@@ -76,7 +80,7 @@
 
 <?php if (
   $snapshot === null
-  || $gasoline === null
+  || $fuelData === null
 ): ?>
 
   <p>
@@ -95,11 +99,44 @@
 
   </p>
 
+  <form
+    method="get"
+    class="fuel-selector">
+
+    <label for="fuel">
+      Combustible
+    </label>
+
+    <select
+      id="fuel"
+      name="fuel"
+      onchange="this.form.submit()">
+
+      <?php foreach (
+        $fuelTypes
+        as $code => $name
+      ): ?>
+
+        <option
+          value="<?= e($code) ?>"
+          <?= $code === $selectedFuel
+            ? 'selected'
+            : ''
+          ?>>
+          <?= e($name) ?>
+        </option>
+
+      <?php endforeach; ?>
+
+    </select>
+
+  </form>
+
 
   <section>
 
     <h2>
-      Gasolina 95 E5
+      <?= e($selectedFuelName) ?>
     </h2>
 
     <div class="stats">
@@ -113,7 +150,7 @@
         <p>
           <?= e(
             formatFuelPrice(
-              $gasoline['min_price']
+              $fuelData['min_price']
             )
           ) ?>
         </p>
@@ -130,7 +167,7 @@
         <p>
           <?= e(
             formatFuelPrice(
-              $gasoline['avg_price']
+              $fuelData['avg_price']
             )
           ) ?>
         </p>
@@ -147,7 +184,7 @@
         <p>
           <?= e(
             formatFuelPrice(
-              $gasoline['max_price']
+              $fuelData['max_price']
             )
           ) ?>
         </p>
@@ -164,7 +201,7 @@
         <p>
 
           <?= number_format(
-            $gasoline['stations_count'],
+            $fuelData['stations_count'],
             0,
             ',',
             '.'
@@ -180,13 +217,13 @@
 
 
   <?php if (
-    $gasoline['cheapest_station'] !== null
+    $fuelData['cheapest_station'] !== null
   ): ?>
 
     <?php
 
     $homeCheapest =
-      $gasoline['cheapest_station'];
+      $fuelData['cheapest_station'];
 
     ?>
 

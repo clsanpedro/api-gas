@@ -9,10 +9,7 @@ declare(strict_types=1);
  * ============================================================
  */
 
-$homeData =
-  require __DIR__
-  . '/../app/home-data.php';
-
+require_once __DIR__ . '/../app/home-data.php';
 require_once __DIR__ . '/../app/helpers.php';
 require_once __DIR__ . '/../app/provinces-data.php';
 require_once __DIR__ . '/../app/province-data.php';
@@ -304,8 +301,7 @@ if (
  * ============================================================
  */
 
-$fuelTypes =
-  getFuelTypes();
+$fuelTypes = getFuelTypes();
 
 
 $selectedFuel =
@@ -327,6 +323,12 @@ if (
 
 $selectedFuelName =
   $fuelTypes[$selectedFuel];
+
+$homeData =
+  getHomeData(
+    $pdo,
+    $selectedFuel
+  );
 
 /*
  * ============================================================
@@ -571,8 +573,8 @@ $snapshot =
   $homeData['snapshot']
   ?? null;
 
-$gasoline =
-  $homeData['gasoline_95_e5']
+$fuelData =
+  $homeData['fuel']
   ?? null;
 
 /*
