@@ -18,6 +18,7 @@ header('Content-Type: text/plain; charset=utf-8');
  */
 
 const MAX_SNAPSHOT_AGE_DAYS = 1;
+const MAX_MARKET_AGE_DAYS = 7;
 
 
 /*
@@ -313,10 +314,136 @@ try {
   echo 'DATOS: ERROR' . PHP_EOL;
 }
 
+/*
+ * ============================================================
+ * 8. DATOS DE MERCADO / BRENT
+ * ============================================================
+ */
+
+try {
+
+  /*
+   * Obtenemos el último precio disponible
+   * de Brent Europe almacenado localmente.
+   */
+
+  $stmtMarket = $pdo->prepare(
+    'SELECT
+        price_date,
+        value,
+        unit,
+        source,
+        updated_at
+     FROM market_prices
+     WHERE series_code = :series_code
+     ORDER BY price_date DESC
+     LIMIT 1'
+  );
+
+  $stmtMarket->execute([
+    'series_code' => 'RBRTE',
+  ]);
+
+  $marketPrice = $stmtMarket->fetch();
+
+
+  if ($marketPrice === false) {
+
+    echo 'BRENT: SIN DATOS' . PHP_EOL;
+
+    $status = 'ERROR';
+  } else {
+
+    echo 'BRENT: OK' . PHP_EOL;
+
+    echo 'BRENT FECHA: '
+      . $marketPrice['price_date']
+      . PHP_EOL;
+
+    echo 'BRENT PRECIO: '
+      . $marketPrice['value']
+      . ' '
+      . $marketPrice['unit']
+      . PHP_EOL;
+
+    echo 'BRENT FUENTE: '
+      . $marketPrice['source']
+      . PHP_EOL;
+
+    echo 'BRENT ACTUALIZADO EN: '
+      . $marketPrice['updated_at']
+      . PHP_EOL;
+
+
+    /*
+     * ========================================================
+     * ANTIGÜEDAD DEL DATO BRENT
+     * ========================================================
+     *
+     * EIA no publica necesariamente datos todos los días.
+     * Fines de semana y festivos generan huecos naturales.
+     */
+
+    $marketDate = new DateTime(
+      $marketPrice['price_date']
+    );
+
+    $now = new DateTime();
+
+    $marketAgeSeconds =
+      $now->getTimestamp()
+      - $marketDate->getTimestamp();
+
+    $marketAgeSeconds = max(
+      0,
+      $marketAgeSeconds
+    );
+
+    $marketAgeHours = round(
+      $marketAgeSeconds / 3600,
+      1
+    );
+
+    $marketAgeDays = (int) floor(
+      $marketAgeSeconds / 86400
+    );
+
+
+    echo 'ANTIGUEDAD BRENT: '
+      . $marketAgeHours
+      . ' hora(s)'
+      . PHP_EOL;
+
+
+    if (
+      $marketAgeDays
+      <= MAX_MARKET_AGE_DAYS
+    ) {
+
+      echo 'MERCADO: OK' . PHP_EOL;
+    } else {
+
+      echo 'MERCADO: DESACTUALIZADO'
+        . PHP_EOL;
+
+      $status = 'ERROR';
+    }
+  }
+} catch (Throwable $e) {
+
+  /*
+   * No mostramos detalles técnicos.
+   */
+
+  echo 'MERCADO: ERROR' . PHP_EOL;
+
+  $status = 'ERROR';
+}
+
 
 /*
  * ============================================================
- * 8. ESTADO GENERAL
+ * 9. ESTADO GENERAL
  * ============================================================
  */
 
@@ -329,7 +456,7 @@ echo 'ESTADO GENERAL: '
 
 /*
  * ============================================================
- * 9. CÓDIGO HTTP
+ * 10. CÓDIGO HTTP
  * ============================================================
  *
  * 200 → todo correcto
