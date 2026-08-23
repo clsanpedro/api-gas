@@ -186,21 +186,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	/*
 	 * ====================================================
-	 * INICIO: GRÁFICA HISTÓRICA
+	 * INICIO: GRÁFICAS
 	 * ====================================================
 	 */
 
 	let historyChart = null;
 	let homeHistoryChart = null;
+	let homeMarketChart = null;
 
 	function getChartColors() {
 		const styles = getComputedStyle(document.documentElement);
 
 		return {
 			text: styles.getPropertyValue('--text').trim(),
+
 			muted: styles.getPropertyValue('--muted').trim(),
+
 			border: styles.getPropertyValue('--border').trim(),
+
 			accent: styles.getPropertyValue('--accent').trim(),
+
 			surface: styles.getPropertyValue('--surface').trim(),
 		};
 	}
@@ -210,28 +215,80 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		if (historyChart) {
 			historyChart.options.plugins.legend.labels.color = colors.text;
+
 			historyChart.options.scales.x.ticks.color = colors.muted;
+
 			historyChart.options.scales.y.ticks.color = colors.muted;
+
 			historyChart.options.scales.x.grid.color = colors.border;
+
 			historyChart.options.scales.y.grid.color = colors.border;
+
 			historyChart.data.datasets[0].borderColor = colors.accent;
+
 			historyChart.data.datasets[0].pointBackgroundColor = colors.accent;
+
 			historyChart.data.datasets[0].pointBorderColor = colors.surface;
+
 			historyChart.update();
 		}
 
 		if (homeHistoryChart) {
 			homeHistoryChart.options.plugins.legend.labels.color = colors.text;
+
 			homeHistoryChart.options.scales.x.ticks.color = colors.muted;
+
 			homeHistoryChart.options.scales.y.ticks.color = colors.muted;
+
 			homeHistoryChart.options.scales.x.grid.color = colors.border;
+
 			homeHistoryChart.options.scales.y.grid.color = colors.border;
+
 			homeHistoryChart.data.datasets[0].borderColor = colors.accent;
+
 			homeHistoryChart.data.datasets[0].pointBackgroundColor = colors.accent;
+
 			homeHistoryChart.data.datasets[0].pointBorderColor = colors.surface;
+
 			homeHistoryChart.update();
 		}
+
+		if (homeMarketChart) {
+			homeMarketChart.options.plugins.legend.labels.color = colors.text;
+
+			homeMarketChart.options.scales.x.ticks.color = colors.muted;
+
+			homeMarketChart.options.scales.y.ticks.color = colors.muted;
+
+			homeMarketChart.options.scales.x.grid.color = colors.border;
+
+			homeMarketChart.options.scales.y.grid.color = colors.border;
+
+			homeMarketChart.data.datasets[0].borderColor = colors.accent;
+
+			homeMarketChart.data.datasets[0].backgroundColor = colors.accent;
+
+			homeMarketChart.data.datasets[0].pointBackgroundColor = colors.accent;
+
+			homeMarketChart.data.datasets[0].pointBorderColor = colors.surface;
+
+			homeMarketChart.data.datasets[1].borderColor = colors.muted;
+
+			homeMarketChart.data.datasets[1].backgroundColor = colors.muted;
+
+			homeMarketChart.data.datasets[1].pointBackgroundColor = colors.muted;
+
+			homeMarketChart.data.datasets[1].pointBorderColor = colors.surface;
+
+			homeMarketChart.update();
+		}
 	}
+
+	/*
+	 * ====================================================
+	 * INICIO: GRÁFICA HISTÓRICA
+	 * ====================================================
+	 */
 
 	const sectionHeadings = document.querySelectorAll('.site-main section > h2');
 
@@ -292,11 +349,13 @@ document.addEventListener('DOMContentLoaded', function () {
 							label =
 								parsedDate.toLocaleDateString('es-ES', {
 									day: '2-digit',
+
 									month: '2-digit',
 								}) +
 								' · ' +
 								parsedDate.toLocaleTimeString('es-ES', {
 									hour: '2-digit',
+
 									minute: '2-digit',
 								});
 						}
@@ -496,6 +555,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 			historyPoints.forEach(function (item) {
 				const rawDate = item.dataset.historyDate;
+
 				const rawPrice = item.dataset.historyPrice;
 
 				const price = Number(rawPrice);
@@ -511,12 +571,15 @@ document.addEventListener('DOMContentLoaded', function () {
 				if (!Number.isNaN(parsedDate.getTime())) {
 					label = parsedDate.toLocaleDateString('es-ES', {
 						day: '2-digit',
+
 						month: '2-digit',
+
 						year: 'numeric',
 					});
 				}
 
 				labels.push(label);
+
 				values.push(price);
 			});
 
@@ -533,12 +596,19 @@ document.addEventListener('DOMContentLoaded', function () {
 							datasets: [
 								{
 									label: 'Precio medio €/l',
+
 									data: values,
+
 									borderColor: colors.accent,
+
 									backgroundColor: colors.accent,
+
 									pointBackgroundColor: colors.accent,
+
 									pointBorderColor: colors.surface,
+
 									pointBorderWidth: 2,
+
 									tension: 0.25,
 								},
 							],
@@ -546,6 +616,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 						options: {
 							responsive: true,
+
 							maintainAspectRatio: false,
 
 							plugins: {
@@ -600,6 +671,382 @@ document.addEventListener('DOMContentLoaded', function () {
 	/*
 	 * ====================================================
 	 * FIN: GRÁFICA HISTÓRICA HOME
+	 * ====================================================
+	 */
+
+	/*
+	 * ====================================================
+	 * INICIO: COMPARACIÓN CARBURANTE / BRENT
+	 * ====================================================
+	 */
+
+	const homeMarketContainer = document.querySelector(
+		'[data-home-market-chart]',
+	);
+
+	if (homeMarketContainer) {
+		const canvas = homeMarketContainer.querySelector(
+			'[data-home-market-canvas]',
+		);
+
+		const fuelPoints = Array.from(
+			homeMarketContainer.querySelectorAll('[data-home-fuel-market-point]'),
+		);
+
+		const brentPoints = Array.from(
+			homeMarketContainer.querySelectorAll('[data-home-brent-point]'),
+		);
+
+		if (canvas && fuelPoints.length >= 2 && brentPoints.length >= 1) {
+			const fuelByDate = new Map();
+
+			const brentByDate = new Map();
+
+			fuelPoints.forEach(function (item) {
+				const rawDate = item.dataset.marketDate;
+
+				const rawPrice = Number(item.dataset.marketPrice);
+
+				if (!rawDate || !Number.isFinite(rawPrice) || rawPrice <= 0) {
+					return;
+				}
+
+				const dateKey = String(rawDate).substring(0, 10);
+
+				fuelByDate.set(dateKey, rawPrice);
+			});
+
+			brentPoints.forEach(function (item) {
+				const rawDate = item.dataset.marketDate;
+
+				const rawPrice = Number(item.dataset.marketPrice);
+
+				if (!rawDate || !Number.isFinite(rawPrice) || rawPrice <= 0) {
+					return;
+				}
+
+				const dateKey = String(rawDate).substring(0, 10);
+
+				brentByDate.set(dateKey, rawPrice);
+			});
+
+			const fuelDates = Array.from(fuelByDate.keys()).sort();
+
+			const brentDates = Array.from(brentByDate.keys()).sort();
+
+			/*
+			 * Busca para una fecha de carburante
+			 * el último dato Brent disponible
+			 * en esa misma fecha o en una anterior.
+			 *
+			 * No permitimos una diferencia superior
+			 * a 7 días para evitar relacionar datos
+			 * de mercado excesivamente antiguos.
+			 */
+			function findBrentForFuelDate(fuelDate) {
+				const fuelDateObject = new Date(fuelDate + 'T00:00:00');
+
+				let matchedDate = null;
+
+				for (let index = brentDates.length - 1; index >= 0; index--) {
+					const brentDate = brentDates[index];
+
+					if (brentDate <= fuelDate) {
+						matchedDate = brentDate;
+
+						break;
+					}
+				}
+
+				if (!matchedDate) {
+					return null;
+				}
+
+				const brentDateObject = new Date(matchedDate + 'T00:00:00');
+
+				const differenceMilliseconds =
+					fuelDateObject.getTime() - brentDateObject.getTime();
+
+				const differenceDays = differenceMilliseconds / 86400000;
+
+				if (differenceDays < 0 || differenceDays > 7) {
+					return null;
+				}
+
+				return {
+					date: matchedDate,
+
+					value: brentByDate.get(matchedDate),
+				};
+			}
+
+			const alignedPoints = [];
+
+			fuelDates.forEach(function (fuelDate) {
+				const fuelPrice = fuelByDate.get(fuelDate);
+
+				const brentMatch = findBrentForFuelDate(fuelDate);
+
+				if (
+					!Number.isFinite(fuelPrice) ||
+					!brentMatch ||
+					!Number.isFinite(brentMatch.value)
+				) {
+					return;
+				}
+
+				alignedPoints.push({
+					date: fuelDate,
+
+					fuelPrice: fuelPrice,
+
+					brentPrice: brentMatch.value,
+
+					brentDate: brentMatch.date,
+				});
+			});
+
+			if (alignedPoints.length >= 5) {
+				const firstFuel = alignedPoints[0].fuelPrice;
+
+				const firstBrent = alignedPoints[0].brentPrice;
+
+				const labels = [];
+				const fuelValues = [];
+				const brentValues = [];
+
+				alignedPoints.forEach(function (point) {
+					const parsedDate = new Date(point.date + 'T00:00:00');
+
+					let label = point.date;
+
+					if (!Number.isNaN(parsedDate.getTime())) {
+						label = parsedDate.toLocaleDateString('es-ES', {
+							day: '2-digit',
+
+							month: '2-digit',
+
+							year: 'numeric',
+						});
+					}
+
+					labels.push(label);
+
+					fuelValues.push(
+						Number(((point.fuelPrice / firstFuel) * 100).toFixed(2)),
+					);
+
+					brentValues.push(
+						Number(((point.brentPrice / firstBrent) * 100).toFixed(2)),
+					);
+				});
+
+				const createHomeMarketChart = function () {
+					const colors = getChartColors();
+
+					homeMarketChart = new Chart(canvas, {
+						type: 'line',
+
+						data: {
+							labels: labels,
+
+							datasets: [
+								{
+									label: 'Carburante (base 100)',
+
+									data: fuelValues,
+
+									borderColor: colors.accent,
+
+									backgroundColor: colors.accent,
+
+									pointBackgroundColor: colors.accent,
+
+									pointBorderColor: colors.surface,
+
+									pointBorderWidth: 2,
+
+									pointRadius: 4,
+
+									pointHoverRadius: 6,
+
+									borderWidth: 3,
+
+									tension: 0.25,
+
+									fill: false,
+								},
+
+								{
+									label: 'Brent €/barril (base 100)',
+
+									data: brentValues,
+
+									borderColor: colors.muted,
+
+									backgroundColor: colors.muted,
+
+									pointBackgroundColor: colors.muted,
+
+									pointBorderColor: colors.surface,
+
+									pointBorderWidth: 2,
+
+									pointRadius: 4,
+
+									pointHoverRadius: 6,
+
+									borderWidth: 3,
+
+									tension: 0.25,
+
+									fill: false,
+								},
+							],
+						},
+
+						options: {
+							responsive: true,
+
+							maintainAspectRatio: false,
+
+							interaction: {
+								mode: 'index',
+
+								intersect: false,
+							},
+
+							plugins: {
+								legend: {
+									labels: {
+										color: colors.text,
+									},
+								},
+
+								tooltip: {
+									callbacks: {
+										label: function (context) {
+											return (
+												context.dataset.label +
+												': ' +
+												context.parsed.y.toFixed(2)
+											);
+										},
+
+										afterBody: function (contexts) {
+											if (!contexts.length) {
+												return '';
+											}
+
+											const index = contexts[0].dataIndex;
+
+											const point = alignedPoints[index];
+
+											if (!point) {
+												return '';
+											}
+
+											return [
+												'Carburante: ' +
+													point.fuelPrice.toLocaleString('es-ES', {
+														minimumFractionDigits: 3,
+
+														maximumFractionDigits: 3,
+													}) +
+													' €/l',
+
+												'Brent: ' +
+													point.brentPrice.toLocaleString('es-ES', {
+														minimumFractionDigits: 2,
+
+														maximumFractionDigits: 2,
+													}) +
+													' €/barril',
+
+												'Fecha Brent: ' + point.brentDate,
+											];
+										},
+									},
+								},
+							},
+
+							scales: {
+								x: {
+									ticks: {
+										color: colors.muted,
+
+										maxTicksLimit: 8,
+									},
+
+									grid: {
+										color: colors.border,
+									},
+								},
+
+								y: {
+									ticks: {
+										color: colors.muted,
+
+										callback: function (value) {
+											return Number(value).toLocaleString('es-ES', {
+												minimumFractionDigits: 0,
+
+												maximumFractionDigits: 2,
+											});
+										},
+									},
+
+									grid: {
+										color: colors.border,
+									},
+								},
+							},
+						},
+					});
+				};
+
+				if (typeof Chart !== 'undefined') {
+					createHomeMarketChart();
+				} else {
+					const chartScript = document.createElement('script');
+
+					chartScript.src =
+						'https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js';
+
+					chartScript.addEventListener('load', createHomeMarketChart);
+
+					document.body.appendChild(chartScript);
+				}
+			} else {
+				const wrapper = homeMarketContainer.querySelector(
+					'.history-chart-wrapper',
+				);
+
+				if (wrapper) {
+					wrapper.innerHTML = '';
+
+					const message = document.createElement('p');
+
+					message.className = 'section-intro';
+
+					message.textContent =
+						'Todavía no hay suficiente histórico de carburantes para realizar una comparación significativa con el petróleo Brent.';
+
+					wrapper.appendChild(message);
+				}
+			}
+		}
+	}
+
+	/*
+	 * ====================================================
+	 * FIN: COMPARACIÓN CARBURANTE / BRENT
+	 * ====================================================
+	 */
+
+	/*
+	 * ====================================================
+	 * FIN: GRÁFICAS
 	 * ====================================================
 	 */
 
@@ -721,6 +1168,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 				if (!response.ok) {
 					clearResults();
+
 					return;
 				}
 

@@ -9,6 +9,7 @@
 /** @var string $searchUrl */
 /** @var array|null $snapshot */
 /** @var array $homeFuelHistory */
+/** @var array $homeBrentHistory */
 ?>
 
 <h1>
@@ -276,6 +277,94 @@
         </div>
 
       </div>
+
+    </section>
+
+  <?php endif; ?>
+
+  <?php if (
+    count($homeBrentHistory) >= 2
+  ): ?>
+
+    <section class="home-market">
+
+      <h2>
+        Carburantes y petróleo
+      </h2>
+
+      <p class="section-intro">
+        Compara la evolución relativa del precio medio nacional de
+        <?= e($selectedFuelName) ?>
+        con el petróleo Brent expresado en euros.
+        Ambas series parten de un índice base 100 para facilitar
+        la comparación de sus variaciones.
+      </p>
+
+      <div
+        class="history-chart-card home-market-chart"
+        data-home-market-chart>
+
+        <div class="history-chart-header">
+
+          <strong>
+            Carburante vs petróleo Brent
+          </strong>
+
+          <span>
+            Comparación de tendencia
+          </span>
+
+        </div>
+
+        <div class="history-chart-wrapper">
+
+          <canvas
+            data-home-market-canvas
+            aria-label="Comparación entre <?= e($selectedFuelName) ?> y petróleo Brent"
+            role="img">
+          </canvas>
+
+        </div>
+
+        <div hidden>
+
+          <?php foreach (
+            $homeBrentHistory
+            as $marketItem
+          ): ?>
+
+            <span
+              data-home-brent-point
+              data-market-date="<?= e($marketItem['price_date']) ?>"
+              data-market-price="<?= e($marketItem['brent_eur']) ?>">
+            </span>
+
+          <?php endforeach; ?>
+
+
+          <?php foreach (
+            $homeFuelHistory
+            as $historyItem
+          ): ?>
+
+            <span
+              data-home-fuel-market-point
+              data-market-date="<?= e($historyItem['api_date']) ?>"
+              data-market-price="<?= e($historyItem['avg_price']) ?>">
+            </span>
+
+          <?php endforeach; ?>
+
+        </div>
+
+      </div>
+
+      <p class="section-intro">
+        El precio del petróleo no se traslada de forma inmediata
+        ni proporcional al precio de los carburantes. También
+        influyen el tipo de cambio, el refino, la distribución,
+        los márgenes y los impuestos.
+      </p>
 
     </section>
 

@@ -16,6 +16,7 @@ require_once __DIR__ . '/../app/province-data.php';
 require_once __DIR__ . '/../app/municipality-data.php';
 require_once __DIR__ . '/../app/station-data.php';
 require_once __DIR__ . '/../app/history-data.php';
+require_once __DIR__ . '/../app/market-data.php';
 require_once __DIR__ . '/../app/search-data.php';
 require_once __DIR__ . '/../app/fuels.php';
 
@@ -334,6 +335,12 @@ $homeFuelHistory =
   getNationalFuelHistory(
     $pdo,
     $selectedFuel,
+    365
+  );
+
+$homeBrentHistory =
+  getBrentEurHistory(
+    $pdo,
     365
   );
 
