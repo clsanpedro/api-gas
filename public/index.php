@@ -1452,19 +1452,7 @@ if (
          INICIO: HEADER
          ====================================================== -->
 
-    <header class="site-header">
-
-      <div class="container">
-
-        <a
-          href="<?= e($homeUrl) ?>"
-          class="brand">
-          PrecioCarburante
-        </a>
-
-      </div>
-
-    </header>
+    <?php require __DIR__ . '/../app/views/layout/header.php'; ?>
 
     <!-- ======================================================
          FIN: HEADER
