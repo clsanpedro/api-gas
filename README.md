@@ -367,10 +367,9 @@ La aplicación debe entenderse como una herramienta informativa y comparativa.
 
 ## 📄 Licencia
 
-Por definir.
+Este proyecto se distribuye bajo la licencia MIT.
 
-Antes de reutilizar o redistribuir el proyecto conviene establecer
-explícitamente una licencia.
+Consulta el archivo [LICENSE](LICENSE) para más información.
 
 ---
 
