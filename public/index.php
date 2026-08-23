@@ -4647,18 +4647,7 @@ if (
          INICIO: FOOTER
          ====================================================== -->
 
-    <footer
-      class="site-footer">
-
-      <div class="container">
-
-        <p>
-          Datos de precios de carburantes en España.
-        </p>
-
-      </div>
-
-    </footer>
+    <?php require __DIR__ . '/../app/views/layout/footer.php'; ?>
 
     <!-- ======================================================
          FIN: FOOTER
